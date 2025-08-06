@@ -17,6 +17,11 @@ export default function ResetPassword() {
   useEffect(() => {
     // Check if we have a session (user clicked reset link)
     const checkSession = async () => {
+      if (!supabase) {
+        setError('Supabase client not initialized')
+        return
+      }
+      
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
         setError('Invalid or expired reset link. Please request a new password reset.')
@@ -49,6 +54,11 @@ export default function ResetPassword() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (!supabase) {
+      setError('Supabase client not initialized')
+      return
+    }
 
     if (!validateForm()) return
 
